@@ -1,7 +1,11 @@
-﻿using ServiceContract;
+﻿using Manager;
+using ServiceContract;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,17 +13,34 @@ namespace Server
 {
     public class SecurityService : ISecurityService
     {
-        //key: clientName - value: port
-        public static Dictionary<string, string> activeClients = new Dictionary<string, string>();
-        private static int nextFreePort = 9999;
-
-        public Dictionary<string, string> RegisterClient(string clientName)
+        //public static AsymmetricKeyParameter certCA;
+        private static Dictionary<string, int> activeUsers = new Dictionary<string, int>();
+        public Dictionary<string, int> GetAllActiveUsers()
         {
-            nextFreePort = nextFreePort - 1;
+            return activeUsers;
+        }
 
-            activeClients.Add(clientName, nextFreePort.ToString());
+        public void IssueCertificate()
+        {
+            var principal = OperationContext.Current.ServiceSecurityContext.WindowsIdentity;
+            var username = Formatter.ParseName(principal.Name);
 
-            return activeClients;
+            CertManager.GenerateCACertificate(username);
+
+            // generate AES key
+            using (AesManaged aes = new AesManaged())
+            {
+                File.WriteAllBytes(username + ".key", aes.Key);
+                File.WriteAllBytes(username + ".IV", aes.IV);
+            }
+
+            //Logg activity
+
+        }
+
+        public void RegisterClient(int port)
+        {
+            throw new NotImplementedException();
         }
     }
 }

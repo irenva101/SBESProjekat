@@ -31,23 +31,23 @@ namespace Client
 			factory = this.CreateChannel();
 		}
 
-		public Dictionary<string, string> RegisterClient(string clientName)
-		{
-			try
-			{
-				//string cltCertCN = Formatter.ParseName(WindowsIdentity.GetCurrent().Name);
-				//string cltCertCN = "milena";
-				//activeClients.Add(cltCertCN);
-				var serverResponse = factory.RegisterClient(clientName);
+		//public Dictionary<string, string> RegisterClient(string clientName)
+		//{
+		//	try
+		//	{
+		//		//string cltCertCN = Formatter.ParseName(WindowsIdentity.GetCurrent().Name);
+		//		//string cltCertCN = "milena";
+		//		//activeClients.Add(cltCertCN);
+		//		//var serverResponse = factory.RegisterClient(clientName);
 
-				return serverResponse;
-			}
-			catch (Exception e)
-			{
-				Console.WriteLine("[TestCommunication] ERROR = {0}", e.Message);
-				return null;
-			}
-		}
+		//		//return serverResponse;
+		//	}
+		//	catch (Exception e)
+		//	{
+		//		Console.WriteLine("[TestCommunication] ERROR = {0}", e.Message);
+		//		return null;
+		//	}
+		//}
 
 		public void Dispose()
 		{

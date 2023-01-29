@@ -11,12 +11,12 @@ namespace ServiceContract
     public interface ISecurityService
     {
         [OperationContract]
-        Dictionary<string, string> RegisterClient(string clientName);
+        void RegisterClient(int port);
 
-        //[OperationContract]
-        //void DisplayActiveClients();
+        [OperationContract]
+        Dictionary<string, int> GetAllActiveUsers();
 
-        //[OperationContract]
-        //List<string> GetActiveClients();
+        [OperationContract]
+        void IssueCertificate();
     }
 }

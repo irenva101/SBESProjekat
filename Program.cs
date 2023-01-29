@@ -25,12 +25,16 @@ namespace Server
         //TODO: Log connections with clients and ended connections in Application Windows event log
         static void Main(string[] args)
         {
-            string srvCertCN = "service"; //OVDE KAZEMO KOJI SERTIFIKAT KORISTIMO
+            string srvCertCN = "service"; 
 
             NetTcpBinding binding = new NetTcpBinding();
-            binding.Security.Transport.ClientCredentialType = TcpClientCredentialType.Certificate;
+            binding.Security.Transport.ClientCredentialType = TcpClientCredentialType.Windows;
+            binding.Security.Mode = SecurityMode.Transport;
+            binding.Security.Transport.ProtectionLevel = System.Net.Security.ProtectionLevel.EncryptAndSign;
 
-            string address = "net.tcp://localhost:9999/SecurityService";
+            var cert = CertManager.GetCertificateFromStorage(StoreName.My, StoreLocation.LocalMachine, "SbesCA");
+
+            string address = "net.tcp://localhost:9999/Receiver";
             ServiceHost host = new ServiceHost(typeof(SecurityService));
             host.AddServiceEndpoint(typeof(ISecurityService), binding, address);
 

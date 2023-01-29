@@ -1,10 +1,16 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Security;
+using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+
 
 namespace ServiceContract
 {
@@ -37,6 +43,25 @@ namespace ServiceContract
 			return null;
 		}
 
+
+		public static void GenerateCACertificate(string subjectName)
+        {
+			
+
+			string proces1 = "/c makecert -sv " + subjectName + ".pvk -iv SbesCA.pvk -n \"CN=" + subjectName + "\" -pe -ic SbesCA.cer " + subjectName + ".cer -sr localmachine -ss My -sky exchange";
+			System.Diagnostics.Process.Start("cmd.exe", proces1).WaitForExit();
+
+			string proces2 = "/c pvk2pfx.exe /pvk " + subjectName + ".pvk /pi 1234 /spc " + subjectName + ".cer /pfx " + subjectName + ".pfx"; //sifra od pfx-a je subjectName
+			System.Diagnostics.Process.Start("cmd.exe", proces2).WaitForExit();
+
+			
+
+		}
+
+
+
+
+		#region Staro
 		/// <summary>
 		/// Get a certificate from file.		
 		/// </summary>
@@ -63,5 +88,7 @@ namespace ServiceContract
 
 			return certificate;
 		}
-	}
+		#endregion
+
+	 }
 }
