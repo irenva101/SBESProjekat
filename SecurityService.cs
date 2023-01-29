@@ -40,7 +40,16 @@ namespace Server
 
         public void RegisterClient(int port)
         {
-            throw new NotImplementedException();
+            var principal = OperationContext.Current.ServiceSecurityContext.WindowsIdentity;
+            var username = Formatter.ParseName(principal.Name);
+            if (activeUsers.ContainsKey(username))
+            {
+                activeUsers[username] = port;
+            }
+            else
+            {
+                activeUsers.Add(username, port);
+            }
         }
     }
 }

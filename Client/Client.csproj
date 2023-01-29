@@ -47,6 +47,11 @@
   <ItemGroup>
     <Compile Include="ChatService.cs" />
     <Compile Include="ClientProxy.cs" />
+    <Compile Include="CommunicationClient\CommunicationClient.cs" />
+    <Compile Include="CommunicationService\CommunicationProvider.cs" />
+    <Compile Include="CommunicationService\CommunicationService.cs" />
+    <Compile Include="CommunicationService\CustomAuthorizationPolicy.cs" />
+    <Compile Include="CommunicationService\X509Principal.cs" />
     <Compile Include="IssuerClient.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
