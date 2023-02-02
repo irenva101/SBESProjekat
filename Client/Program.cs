@@ -46,6 +46,88 @@ namespace Client
             }
             int port = 0;
 
+            using (IssuerClient proxy = new IssuerClient(binding, address))
+            {
+                Random rnd = new Random(System.DateTime.Now.Millisecond);
+                port = rnd.Next(12000, 20000);
+                proxy.RegisterClient(port);
+            }
+            CommunicationService.CommunicationService communicationService = new CommunicationService.CommunicationService($"net.tcp://localhost:{port}/{username}");
+
+            try
+            {
+                communicationService.Open();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            using (IssuerClient proxy = new IssuerClient(binding, address))
+            {
+                Console.WriteLine("Press enter to get active user list.");
+                Console.ReadLine();
+                Console.WriteLine("Active users list:");
+                var list = proxy.GetAllActiveUsers();
+                var i = 0;
+                if (list != null)
+                {
+                    //if (list.Count() == 1)
+                    //{
+                    //    Console.WriteLine("You are the only active user.");
+                    //    while (list.Count() == 1)
+                    //    {
+                    //        Console.WriteLine("Waiting for other clients to be active.");
+                    //        Thread.Sleep(200);
+                    //    }
+                    //}
+
+                    var users = new List<String>();
+                    foreach (var user in list.Keys)
+                    {
+                        Console.WriteLine($"{++i}. {user}");
+                        users.Add(user);
+                    }
+
+
+                }
+
+                Console.WriteLine("Select user:");
+                var input = "";
+                var selected = 0;
+                do
+                {
+                    input = Console.ReadLine();
+                } while (!int.TryParse(input, out selected) || selected < 1 || selected > i);
+
+                while (true)
+                {
+                    Console.WriteLine("Enter message for user: ");
+                    var msg = Console.ReadLine();
+
+                    NetTcpBinding tcpBinding = new NetTcpBinding();
+                    tcpBinding.Security.Transport.ClientCredentialType = TcpClientCredentialType.Certificate;
+                    var serverName = list.Keys.ToList()[selected - 1];
+                    Console.WriteLine("Selected user: " + serverName);
+                    //Console.WriteLine("Waiting for service certificate...");
+                    while (CertManager.GetCertificateFromStorage(StoreName.TrustedPeople, StoreLocation.LocalMachine, serverName) == null)
+                    {
+                        Thread.Sleep(200);
+                    }
+                    X509Certificate2 srvCert = CertManager.GetCertificateFromStorage(StoreName.TrustedPeople, StoreLocation.LocalMachine, serverName);
+                    EndpointAddress address1 = new EndpointAddress(new Uri($"net.tcp://localhost:{list[serverName]}/" + serverName), new X509CertificateEndpointIdentity(srvCert));
+                    using (CommunicationClient.CommunicationClient client = new CommunicationClient.CommunicationClient(tcpBinding, address1))
+                    {
+                        client.SendMessage(msg);
+                    }
+                }
+
+            }
+
+            Console.WriteLine("Press <enter> to continue ...");
+            Console.ReadLine();
+
+            communicationService.Close();
 
 
 
