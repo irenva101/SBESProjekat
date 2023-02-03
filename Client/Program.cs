@@ -31,7 +31,9 @@ namespace Client
             EndpointAddress address = new EndpointAddress(new Uri("net.tcp://localhost:9999/Receiver"), //ovim podesavamo identitet servisa koji klijent ocekuje
                                       EndpointIdentity.CreateUpnIdentity(username));
 
-            if(CertManager.GetCertificateFromStorage(StoreName.My, StoreLocation.LocalMachine, username) == null)
+            var cert = CertManager.GetCertificateFromStorage(StoreName.My, StoreLocation.LocalMachine, username);
+
+            if (CertManager.GetCertificateFromStorage(StoreName.My, StoreLocation.LocalMachine, username) == null)
             {
                 using (IssuerClient proxy = new IssuerClient(binding, address))
                 {
@@ -43,6 +45,14 @@ namespace Client
                     Thread.Sleep(200);
                 }
 
+            }else if (!cert.Issuer.Equals("CN=SbesCA"))
+            {
+                using (IssuerClient proxy = new IssuerClient(binding, address))
+                {
+                    proxy.RevokeCertificate(cert);
+                }
+                Console.WriteLine("Certificate you have provided is not appropriate. Please exit.");
+                Console.ReadKey();
             }
             int port = 0;
 
@@ -72,15 +82,7 @@ namespace Client
                 var i = 0;
                 if (list != null)
                 {
-                    //if (list.Count() == 1)
-                    //{
-                    //    Console.WriteLine("You are the only active user.");
-                    //    while (list.Count() == 1)
-                    //    {
-                    //        Console.WriteLine("Waiting for other clients to be active.");
-                    //        Thread.Sleep(200);
-                    //    }
-                    //}
+               
 
                     var users = new List<String>();
                     foreach (var user in list.Keys)
@@ -118,7 +120,8 @@ namespace Client
                     EndpointAddress address1 = new EndpointAddress(new Uri($"net.tcp://localhost:{list[serverName]}/" + serverName), new X509CertificateEndpointIdentity(srvCert));
                     using (CommunicationClient.CommunicationClient client = new CommunicationClient.CommunicationClient(tcpBinding, address1))
                     {
-                        client.SendMessage(msg);
+                        DateTime now = DateTime.Now;
+                        client.SendMessage(msg, now);
                     }
                 }
 

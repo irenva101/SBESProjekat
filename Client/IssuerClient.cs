@@ -3,6 +3,7 @@ using ServiceContract;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Security.Principal;
 using System.ServiceModel;
 using System.Text;
@@ -23,7 +24,7 @@ namespace Client
         {
             try
             {
-                factory.IssueCertificate(); //odavde treba da udje u SecurityServicezna
+                factory.IssueCertificate(); 
             }
             catch(Exception e)
             {
@@ -65,6 +66,29 @@ namespace Client
             this.Close();
         }
 
-   
+        public Dictionary<string, X509Certificate2> GetRevocationList()
+        {
+            try
+            {
+                return factory.GetRevocationList();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("[TestCommunication] ERROR = {0}", e.Message);
+            }
+            return null;
+        }
+
+        public void RevokeCertificate(X509Certificate2 cert)
+        {
+            try
+            {
+                factory.RevokeCertificate(cert);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("[TestCommunication] ERROR = {0}", e.Message);
+            }
+        }
     }
 }

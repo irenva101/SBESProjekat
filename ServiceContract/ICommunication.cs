@@ -12,6 +12,6 @@ namespace ServiceContract
     {
         [OperationContract]
         [FaultContract(typeof(FaultException))]
-        void SendMessage(string msg);
+        void SendMessage(string msg, DateTime date);
     }
 }
