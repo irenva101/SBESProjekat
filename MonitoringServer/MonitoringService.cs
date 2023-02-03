@@ -8,7 +8,7 @@ namespace MonitoringServer
 {
     public class MonitoringService : IMonitoringContract
     {
-        private const string Path = "C:/Users/Nikola/Desktop/SBES/Server/bin/Debug/";
+        private const string Path = "C:/Users/irenv/Desktop/Novi Sbes - Copy/Server/bin/Debug/";
         private const string MessagesPath = "messages.txt";
 
         public void SendMessageToLogs(byte[] message)

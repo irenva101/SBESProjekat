@@ -27,14 +27,24 @@ namespace Client.CommunicationClient
             factory = this.CreateChannel();
         }
 
-        public void SendMessage(string msg)
+        public void SendMessage(string msg, DateTime now)
         {
             try
             {
-                factory.SendMessage(msg);
+                factory.SendMessage(msg,now);
             }
             catch (Exception ex) //
             {
+                //ConnectionFailed EventLog
+                try
+                {
+                    Audit.ConnectionFailed();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+
                 Console.WriteLine(ex.Message);
             }
         }

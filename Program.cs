@@ -51,7 +51,7 @@ namespace Server
             try
             {
                 host.Open();
-                Console.WriteLine("WCFService is started.\nPress <enter> to stop ...");
+                Console.WriteLine("Server is started.\nPress <enter> to stop ...");
                 Console.ReadLine();
             }
             catch (Exception e)

@@ -44,7 +44,7 @@ namespace ServiceContract
 		}
 
 
-		public static void GenerateCACertificate(string subjectName)
+		public static bool GenerateCACertificate(string subjectName)
         {
 			
 
@@ -54,41 +54,11 @@ namespace ServiceContract
 			string proces2 = "/c pvk2pfx.exe /pvk " + subjectName + ".pvk /pi 1234 /spc " + subjectName + ".cer /pfx " + subjectName + ".pfx"; //sifra od pfx-a je subjectName
 			System.Diagnostics.Process.Start("cmd.exe", proces2).WaitForExit();
 
-			
+			Console.ReadLine();
+
+			return true;
 
 		}
-
-
-
-
-		#region Staro
-		/// <summary>
-		/// Get a certificate from file.		
-		/// </summary>
-		/// <param name="fileName"> .cer file name </param>
-		/// <returns> The requested certificate. If no valid certificate is found, returns null. </returns>
-		public static X509Certificate2 GetCertificateFromFile(string fileName)
-		{
-			X509Certificate2 certificate = null;
-
-
-			return certificate;
-		}
-
-		/// <summary>
-		/// Get a certificate from file.
-		/// </summary>
-		/// <param name="fileName">.pfx file name</param>
-		/// <param name="pwd"> password for .pfx file</param>
-		/// <returns>The requested certificate. If no valid certificate is found, returns null.</returns>
-		public static X509Certificate2 GetCertificateFromFile(string fileName, SecureString pwd)
-		{
-			X509Certificate2 certificate = null;
-
-
-			return certificate;
-		}
-		#endregion
 
 	 }
 }
