@@ -1,8 +1,13 @@
 ﻿using ServiceContract;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.ServiceModel;
+using System.ServiceModel.Description;
 using System.ServiceModel.Security;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Server
 {
@@ -21,7 +26,7 @@ namespace Server
         //TODO: Log connections with clients and ended connections in Application Windows event log
         static void Main(string[] args)
         {
-            string srvCertCN = "service";
+            string srvCertCN = "service"; 
 
             NetTcpBinding binding = new NetTcpBinding();
             binding.Security.Transport.ClientCredentialType = TcpClientCredentialType.Windows;
@@ -33,6 +38,7 @@ namespace Server
             string address = "net.tcp://localhost:9999/Receiver";
             ServiceHost host = new ServiceHost(typeof(SecurityService));
             host.AddServiceEndpoint(typeof(ISecurityService), binding, address);
+          
 
             ///Custom validation mode enables creation of a custom validator - CustomCertificateValidator
 			host.Credentials.ClientCertificate.Authentication.CertificateValidationMode = X509CertificateValidationMode.Custom; //validacija je po chain of thrust principu

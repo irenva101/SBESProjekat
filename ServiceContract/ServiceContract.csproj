@@ -56,9 +56,6 @@
     <Compile Include="ServiceCertValidator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Manager\Manager.csproj">
       <Project>{808D5D78-950E-4F15-8DED-2FC934C1ECD2}</Project>
       <Name>Manager</Name>

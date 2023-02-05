@@ -1,14 +1,19 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Resources;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Manager
 {
     public enum AuditEventTypes
     {
-        GenerationCertificationSuccess = 0,
-        RevocationCertSuccess = 1,
-        ConnectionSuccess = 2,
-        ConnectionFailed = 3
+        GenerationCertificationSuccess=0,
+            RevocationCertSuccess=1,
+            ConnectionSuccess=2,
+            ConnectionFailed=3
     }
 
     public class AuditEvents
@@ -30,7 +35,6 @@ namespace Manager
                 }
             }
         }
-
         public static string GenerationCertificationSuccess
         {
             get
@@ -38,7 +42,6 @@ namespace Manager
                 return ResourceMgr.GetString(AuditEventTypes.GenerationCertificationSuccess.ToString());
             }
         }
-
         public static string RevocationCertSuccess
         {
             get
@@ -46,7 +49,6 @@ namespace Manager
                 return ResourceMgr.GetString(AuditEventTypes.RevocationCertSuccess.ToString());
             }
         }
-
         public static string ConnectionSuccess
         {
             get
@@ -61,5 +63,6 @@ namespace Manager
                 return ResourceMgr.GetString(AuditEventTypes.ConnectionFailed.ToString());
             }
         }
+
     }
 }

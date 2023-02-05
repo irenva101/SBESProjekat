@@ -1,9 +1,15 @@
-﻿using System.Security.Principal;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Principal;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Client.CommunicationService
 {
-    public class X509Principal
+    internal class X509Principal : IPrincipal
     {
+
         private IIdentity identity;
 
         public X509Principal(IIdentity identity)
@@ -15,7 +21,6 @@ namespace Client.CommunicationService
         {
             get { return identity; }
         }
-
         public bool IsInRole(string role)
         {
             return identity.Name.Contains(role);
