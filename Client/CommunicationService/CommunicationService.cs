@@ -1,22 +1,21 @@
-﻿using ServiceContract;
+﻿using Manager;
+using ServiceContract;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Policy;
-using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Security.Principal;
-using System.ServiceModel.Description;
 using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
-using Manager;
+using System.ServiceModel.Description;
 
 namespace Client.CommunicationService
 {
     public class CommunicationService
     {
         public string Address { get; private set; }
+
         public NetTcpBinding Binding { get; private set; }
+
         public ServiceHost Host { get; private set; }
 
         public CommunicationService(String address)

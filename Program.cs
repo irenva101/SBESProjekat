@@ -1,12 +1,8 @@
 ﻿using ServiceContract;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.ServiceModel;
 using System.ServiceModel.Security;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Server
 {
@@ -25,7 +21,7 @@ namespace Server
         //TODO: Log connections with clients and ended connections in Application Windows event log
         static void Main(string[] args)
         {
-            string srvCertCN = "service"; 
+            string srvCertCN = "service";
 
             NetTcpBinding binding = new NetTcpBinding();
             binding.Security.Transport.ClientCredentialType = TcpClientCredentialType.Windows;

@@ -1,32 +1,24 @@
-﻿using Manager;
-using ServiceContract;
+﻿using ServiceContract;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography.X509Certificates;
-using System.Security.Principal;
 using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Client
 {
     public class IssuerClient : ChannelFactory<ISecurityService>, ISecurityService, IDisposable
     {
         ISecurityService factory;
-        public IssuerClient(NetTcpBinding binding, EndpointAddress address) : base(binding, address)
-        {
-            var cltCertCN = Formatter.ParseName(WindowsIdentity.GetCurrent().Name);
-            factory = this.CreateChannel();
-        }
+
+        public IssuerClient(NetTcpBinding binding, EndpointAddress address) : base(binding, address) => factory = this.CreateChannel();
 
         public void IssueCertificate()
         {
             try
             {
-                factory.IssueCertificate(); 
+                factory.IssueCertificate();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine("[TestCommunication] ERROR = {0}", e.Message);
             }
@@ -38,7 +30,7 @@ namespace Client
             {
                 return factory.GetAllActiveUsers();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine("[TestCommunication] ERROR = {0}", e.Message);
             }
@@ -59,7 +51,7 @@ namespace Client
 
         public void Dispose()
         {
-            if(factory != null)
+            if (factory != null)
             {
                 factory = null;
             }

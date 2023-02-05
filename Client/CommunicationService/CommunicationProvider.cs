@@ -1,12 +1,8 @@
 ﻿using Manager;
 using ServiceContract;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Client.CommunicationService
 {
@@ -32,16 +28,14 @@ namespace Client.CommunicationService
 
             var msg1 = $"At {date.Day}.{date.Month}.{date.Year}. {date.Hour}:{date.Minute}--------sender:{sender}--------receiver:{receiver}--------message:{msg}";
 
-
-
             var keyPath = receiver + ".key";
-            string path = "C:/Users/irenv/Desktop/Novi Sbes - Copy/Server/bin/Debug/";
+            string path = "C:/Users/Nikola/source/repos/SBESProjekt/bin/Debug/";
 
             Console.WriteLine(receiver);
-            if (File.Exists(path+keyPath))
+            if (File.Exists(path + keyPath))
             {
-                var key = File.ReadAllBytes(path+keyPath);
-                var iv = File.ReadAllBytes(path+receiver + ".IV");
+                var key = File.ReadAllBytes(path + keyPath);
+                var iv = File.ReadAllBytes(path + receiver + ".IV");
 
                 var encrypted = AES.Encrypt(msg1, key, iv);
 
