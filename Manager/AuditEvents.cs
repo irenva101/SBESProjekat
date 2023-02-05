@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Resources;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Manager
 {
@@ -15,6 +10,7 @@ namespace Manager
         ConnectionSuccess = 2,
         ConnectionFailed = 3
     }
+
     public class AuditEvents
     {
         private static ResourceManager resourceManager = null;
@@ -34,6 +30,7 @@ namespace Manager
                 }
             }
         }
+
         public static string GenerationCertificationSuccess
         {
             get
@@ -41,6 +38,7 @@ namespace Manager
                 return ResourceMgr.GetString(AuditEventTypes.GenerationCertificationSuccess.ToString());
             }
         }
+
         public static string RevocationCertSuccess
         {
             get
@@ -48,6 +46,7 @@ namespace Manager
                 return ResourceMgr.GetString(AuditEventTypes.RevocationCertSuccess.ToString());
             }
         }
+
         public static string ConnectionSuccess
         {
             get

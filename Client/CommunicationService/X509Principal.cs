@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Security.Principal;
 
 namespace Client.CommunicationService
 {
@@ -20,6 +15,7 @@ namespace Client.CommunicationService
         {
             get { return identity; }
         }
+
         public bool IsInRole(string role)
         {
             return identity.Name.Contains(role);

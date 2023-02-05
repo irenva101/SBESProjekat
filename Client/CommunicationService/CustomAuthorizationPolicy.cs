@@ -2,28 +2,17 @@
 using System.Collections.Generic;
 using System.IdentityModel.Claims;
 using System.IdentityModel.Policy;
-using System.Linq;
 using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Client.CommunicationService
 {
     public class CustomAuthorizationPolicy : IAuthorizationPolicy
     {
-        public CustomAuthorizationPolicy()
-        {
-            Id = Guid.NewGuid().ToString();
-        }
-        public ClaimSet Issuer
-        {
-            get { return ClaimSet.System; }
-        }
+        public CustomAuthorizationPolicy() { Id = Guid.NewGuid().ToString(); }
 
-        public string Id
-        {
-            get;
-        }
+        public ClaimSet Issuer { get { return ClaimSet.System; } }
+
+        public string Id { get; }
 
         public bool Evaluate(EvaluationContext evaluationContext, ref object state)
         {
@@ -31,7 +20,9 @@ namespace Client.CommunicationService
             {
                 return false;
             }
+
             IList<IIdentity> identities = list as IList<IIdentity>;
+
             if (list == null || identities.Count <= 0)
             {
                 return false;

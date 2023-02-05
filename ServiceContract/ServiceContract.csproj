@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ServiceContract</RootNamespace>
     <AssemblyName>ServiceContract</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
@@ -49,8 +49,6 @@
   <ItemGroup>
     <Compile Include="CertManager.cs" />
     <Compile Include="ClientCertValidator.cs" />
-    <Compile Include="ClientData.cs" />
-    <Compile Include="IChatService.cs" />
     <Compile Include="ICommunication.cs" />
     <Compile Include="IMonitoringContract.cs" />
     <Compile Include="ISecurityService.cs" />
@@ -59,6 +57,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Manager\Manager.csproj">
+      <Project>{808D5D78-950E-4F15-8DED-2FC934C1ECD2}</Project>
+      <Name>Manager</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

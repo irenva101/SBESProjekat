@@ -2,8 +2,6 @@
 using ServiceContract;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.ServiceModel;
 
@@ -11,9 +9,11 @@ namespace Server
 {
     public class SecurityService : ISecurityService
     {
-        
+
         private static Dictionary<string, int> activeUsers = new Dictionary<string, int>();
+
         private static Dictionary<string, X509Certificate2> revocationList = new Dictionary<string, X509Certificate2>();
+
         public Dictionary<string, int> GetAllActiveUsers()
         {
             return activeUsers;
@@ -41,16 +41,6 @@ namespace Server
                     Console.WriteLine(e.Message);
                 }
             }
-
-            // generate AES key
-            using (AesManaged aes = new AesManaged())
-            {
-                File.WriteAllBytes(username + ".key", aes.Key);
-                File.WriteAllBytes(username + ".IV", aes.IV);
-            }
-
-            //Logg activity
-
         }
 
         public void RegisterClient(int port)

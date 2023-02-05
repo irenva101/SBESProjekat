@@ -1,14 +1,15 @@
-﻿using System;
+﻿using Manager;
+using ServiceContract;
+using System;
 using System.Security.Principal;
 using System.ServiceModel;
-using Manager;
-using ServiceContract;
 
 namespace Client
 {
     public class MonitoringClient : IMonitoringContract
     {
         readonly IMonitoringContract factory;
+
         public MonitoringClient()
         {
             var username = Formatter.ParseName(WindowsIdentity.GetCurrent().Name);
