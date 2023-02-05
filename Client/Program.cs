@@ -1,4 +1,5 @@
-﻿using Manager;
+﻿
+using Manager;
 using ServiceContract;
 using System;
 using System.Collections.Generic;
@@ -6,18 +7,18 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Security.Principal;
 using System.ServiceModel;
+using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Client
 {
     class Program
     {
         public static string srvCertCN = "service";
-
         public static X509Certificate2 srvCert = CertManager.GetCertificateFromStorage(StoreName.TrustedPeople, StoreLocation.LocalMachine, srvCertCN);
-
         static void Main(string[] args)
-        {
+        { 
             var username = Formatter.ParseName(WindowsIdentity.GetCurrent().Name); //bice irenv
 
             NetTcpBinding binding = new NetTcpBinding();
@@ -31,41 +32,40 @@ namespace Client
                                       EndpointIdentity.CreateUpnIdentity(username));
 
             var cert = CertManager.GetCertificateFromStorage(StoreName.My, StoreLocation.LocalMachine, username);
+            //var issuer = cert.Issuer;
 
             if (CertManager.GetCertificateFromStorage(StoreName.My, StoreLocation.LocalMachine, username) == null)
             {
+
                 using (IssuerClient proxy = new IssuerClient(binding, address))
                 {
                     proxy.IssueCertificate();
                 }
-
                 Console.WriteLine("Waiting to install certificate.");
                 while (CertManager.GetCertificateFromStorage(StoreName.My, StoreLocation.LocalMachine, username) == null)
                 {
                     Thread.Sleep(200);
                 }
-
             }
-            else if (!cert.Issuer.Equals("CN=SbesCA"))
+            else if(!cert.Issuer.Equals("CN=SbesCA"))
             {
                 using (IssuerClient proxy = new IssuerClient(binding, address))
                 {
                     proxy.RevokeCertificate(cert);
                 }
-
                 Console.WriteLine("Certificate you have provided is not appropriate. Please exit.");
                 Console.ReadKey();
             }
+           
             int port = 0;
-
-            using (IssuerClient proxy = new IssuerClient(binding, address))
+            using(IssuerClient proxy = new IssuerClient(binding, address))
             {
                 Random rnd = new Random(System.DateTime.Now.Millisecond);
                 port = rnd.Next(12000, 20000);
                 proxy.RegisterClient(port);
             }
+            CommunicationService.CommunicationService communicationService= new CommunicationService.CommunicationService($"net.tcp://localhost:{port}/{username}");
 
-            CommunicationService.CommunicationService communicationService = new CommunicationService.CommunicationService($"net.tcp://localhost:{port}/{username}");
             try
             {
                 communicationService.Open();
@@ -75,14 +75,12 @@ namespace Client
                 Console.WriteLine(ex.Message);
             }
 
-            using (IssuerClient proxy = new IssuerClient(binding, address))
+            using (IssuerClient proxy=new IssuerClient(binding, address))
             {
                 Console.WriteLine("Press enter to get active user list.");
                 Console.ReadLine();
                 Console.WriteLine("Active users list:");
-
                 var list = proxy.GetAllActiveUsers();
-
                 var i = 0;
                 if (list != null)
                 {
@@ -92,8 +90,7 @@ namespace Client
                         Console.WriteLine($"{++i}. {user}");
                         users.Add(user);
                     }
-
-
+                    
                 }
 
                 Console.WriteLine("Select user:");
@@ -112,31 +109,31 @@ namespace Client
                     NetTcpBinding tcpBinding = new NetTcpBinding();
                     tcpBinding.Security.Transport.ClientCredentialType = TcpClientCredentialType.Certificate;
                     var serverName = list.Keys.ToList()[selected - 1];
-
                     Console.WriteLine("Selected user: " + serverName);
                     //Console.WriteLine("Waiting for service certificate...");
-
                     while (CertManager.GetCertificateFromStorage(StoreName.TrustedPeople, StoreLocation.LocalMachine, serverName) == null)
                     {
                         Thread.Sleep(200);
                     }
-
-                    X509Certificate2 srvCert = CertManager.GetCertificateFromStorage(StoreName.TrustedPeople, StoreLocation.LocalMachine, serverName);
-                    EndpointAddress address1 = new EndpointAddress(new Uri($"net.tcp://localhost:{list[serverName]}/" + serverName), new X509CertificateEndpointIdentity(srvCert));
-
+                    X509Certificate2 srvCert1 = CertManager.GetCertificateFromStorage(StoreName.TrustedPeople, StoreLocation.LocalMachine, serverName);
+                    EndpointAddress address1 = new EndpointAddress(new Uri($"net.tcp://localhost:{list[serverName]}/" + serverName), new X509CertificateEndpointIdentity(srvCert1));
                     using (CommunicationClient.CommunicationClient client = new CommunicationClient.CommunicationClient(tcpBinding, address1))
                     {
                         DateTime now = DateTime.Now;
                         client.SendMessage(msg, now);
                     }
+
+                    
                 }
 
+       
             }
 
             Console.WriteLine("Press <enter> to continue ...");
             Console.ReadLine();
 
             communicationService.Close();
+
         }
     }
 }
